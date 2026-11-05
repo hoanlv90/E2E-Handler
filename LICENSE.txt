@@ -1,0 +1,18 @@
+E2E-Handler beta — Application Binary License
+Copyright (c) 2026 Viet-Hoan Le. All rights reserved.
+Contact: hoanlv@uw.edu
+
+Permission is granted to download, install, use and redistribute unmodified
+binary copies of E2E-Handler beta with its documentation and license notices.
+This permission does not grant access to, or a license to, the application's
+source code. The author retains ownership of the application and documentation.
+
+The software is provided "AS IS", without warranty of any kind, express or
+implied, including warranties of merchantability, fitness for a particular
+purpose and noninfringement. To the extent permitted by law, the author shall
+not be liable for any claim, damage or other liability arising from its use.
+
+Third-party components are licensed separately under their respective terms.
+Nothing here restricts rights granted by those licenses, including replacement
+or modification of LGPL libraries, or debugging/reverse engineering necessary
+to use modified versions of those libraries with the application.

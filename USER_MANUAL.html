@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>E2E-Handler beta — User Manual</title><style>body{font:16px/1.6 Segoe UI,Arial,sans-serif;color:#202b38;max-width:980px;margin:40px auto;padding:0 24px}h1,h2,h3{line-height:1.25;color:#123354}h2{border-bottom:1px solid #cbd5e1;padding-bottom:10px;margin-top:40px}table{border-collapse:collapse;width:100%;margin:20px 0}th,td{border:1px solid #cbd5e1;padding:9px 12px;text-align:left}th{background:#eaf2f8}pre{background:#f1f5f9;padding:16px;overflow:auto}code{font-family:Consolas,monospace}a{color:#0068b3}@media print{body{margin:0;max-width:none;font-size:10pt}h2,h3{break-after:avoid}table,pre{break-inside:avoid}}</style><body><h1 id="e2e-handler-user-manual">E2E-Handler User Manual</h1>
+<p><strong>Version beta</strong> • <strong>Author: Viet-Hoan Le</strong> • <strong>Email: hoanlv@uw.edu</strong></p>
+<p>E2E-Handler creates en face projection images and retinal thickness maps from Heidelberg SPECTRALIS OCT volume scans. It uses an <strong>AVI file for the OCT images</strong> and the <strong>corresponding E2E file for the segmentation layers and scan information</strong>. Both files are required.</p>
+<p><strong>Workflow:</strong> prepare and correct segmentation in HEYEX → export AVI and E2E → place and name the files → load the volume → generate and review results.</p>
+<h2 id="1-prepare-your-scan-in-heyex">1. Prepare your scan in HEYEX</h2>
+<p>Complete these steps <strong>before opening the data in E2E-Handler</strong>. Menu wording and available export options vary with the HEYEX version and local configuration; use the instructions supplied with your HEYEX installation when a menu differs.</p>
+<h3 id="11-generate-and-correct-the-segmentation">1.1 Generate and correct the segmentation</h3>
+<ol>
+<li>Open the required patient, examination and OCT volume in <strong>Heidelberg Eye Explorer (HEYEX)</strong>.</li>
+<li>Confirm the correct eye, examination date and volume. Use a <strong>regular, parallel raster volume scan</strong>. Radial/star, circular and irregular scan patterns are not supported.</li>
+<li>Use the HEYEX segmentation function to generate the retinal layer boundaries needed for your analysis.</li>
+<li>Review the segmentation throughout the volume, scrolling through <strong>all B-scans</strong>. Correct misplaced boundaries, discontinuities, missing segments and sudden layer jumps using the HEYEX editing tools.</li>
+<li>Save the corrected analysis in HEYEX before exporting.</li>
+</ol>
+<p>The default analyses use the layer labels <strong>ILM, INL, PR1, RPE and BM</strong>. In E2E-Handler, <strong>INL denotes the INL–OPL boundary</strong>. A custom slab or thickness map needs both of its selected boundaries to be available. Missing required layers prevent the affected output from being generated.</p>
+<h3 id="12-export-the-volume-as-an-avi-file">1.2 Export the volume as an AVI file</h3>
+<ol>
+<li>Select the corrected <strong>volume scan thumbnail</strong> in HEYEX.</li>
+<li>Right-click and choose <strong>Export → as Picture</strong> (also referred to as <strong>Export as pictures</strong>). In versions that provide it, this command is also available from the analysis window's <strong>Image</strong> menu.</li>
+<li>In the save dialog, choose <strong>AVI (.avi)</strong> as the file type for the volume.</li>
+<li>Export the <strong>complete B-scan sequence</strong>, with <strong>one AVI frame per B-scan</strong>, in the original scan order. Choose the OCT image's <strong>1:1 Pixel</strong> setting where available and preserve its native pixel dimensions.</li>
+<li>Disable options that add patient information, labels or graphics, such as <strong>Add Info Block</strong>, <strong>Add Patient Name</strong> and <strong>Add Overlays</strong>. Export the OCT image without segmentation lines or measurement graphics burned into the pixels.</li>
+<li>Save the AVI using the naming format in <a href="#2-place-and-name-the-files">Section 2</a>.</li>
+</ol>
+<p>The AVI may contain a fundus image on the left and an OCT B-scan on the right. This layout is supported: E2E-Handler automatically extracts the <strong>right-hand OCT region</strong>, using the E2E A-line count and depth-pixel count. Keep the OCT panel at its native size and at the top of the frame. If HEYEX offers an option to reduce the fundus panel to the OCT panel's height, it may be used without resizing the OCT panel. Export a B-scan sequence rather than a screen recording, a single B-scan or a rotating 3D view.</p>
+<p>The manufacturer describes picture export and its image layout in the <a href="https://research.unityhealth.to/wp-content/uploads/2015/09/Spectralis-Quick-Guide.pdf">SPECTRALIS Quick Guide, “HEYEX – Image and Data Export”</a>. Consult your installed SPECTRALIS manual for version-specific AVI export options.</p>
+<h3 id="13-export-the-corresponding-e2e-file">1.3 Export the corresponding E2E file</h3>
+<ol>
+<li>Export the <strong>same volume or examination</strong> as an <strong>E2E (.e2e)</strong> file <strong>after saving the corrected segmentation</strong>. The E2E is needed to retain the segmentation data.</li>
+<li>In HEYEX versions with a thumbnail context menu, use <strong>Export → as E2E</strong> and choose the destination folder.</li>
+<li>In HEYEX 2 installations using export templates, open <strong>Export</strong>, select the <strong>E2E</strong> template category, add the required examination/series to the appropriate export template, and export to the destination drive/folder. Wait for successful completion. This workflow is documented in the manufacturer's <a href="https://www.academy.heidelbergengineering.com/hedata/e-learning/Totara/Dateien/pdf-tutorials/D4002455-001_HEYEX2_PDFTutorial_BasicNavigationAndFunctions_EN.pdf">HEYEX 2 Basic Navigation and Functions tutorial, Export tab</a>.</li>
+<li>Place the exported E2E beside its AVI.</li>
+</ol>
+<p><strong>If you correct the segmentation later, save it in HEYEX and export the E2E again before repeating the analysis.</strong> If you change the selected volume or its image geometry, export both files again. An older E2E will not contain your latest segmentation corrections.</p>
+<h2 id="2-place-and-name-the-files">2. Place and name the files</h2>
+<p>For automatic loading, place the matching AVI and E2E <strong>in the same folder</strong> and use these names:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Recommended filename</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OCT volume AVI</td>
+<td><code>subjectID_eye_YYYYMMDD.avi</code></td>
+<td><code>TEST000_OS_20220224.avi</code></td>
+</tr>
+<tr>
+<td>Corresponding E2E</td>
+<td><code>subjectID.e2e</code></td>
+<td><code>TEST000.e2e</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Use the <strong>same subject ID</strong> in both filenames. A study ID can be used.</li>
+<li>Use <strong>OD</strong> for the right eye or <strong>OS</strong> for the left eye.</li>
+<li>Use the actual scan date: <strong>YYYYMMDD</strong> means four-digit year, two-digit month and two-digit day. For example, <code>20220224</code> means <strong>24 February 2022</strong>.</li>
+<li>Ensure the filename eye and date agree with the corresponding E2E series.</li>
+<li>Uppercase or lowercase file extensions are accepted. An E2E visit suffix such as <code>TEST000_V0.E2E</code> is also supported.</li>
+</ul>
+<p>Example folder, using illustrative filenames:</p>
+<pre><code class="language-text">OCT_data/
+└── TEST000_OS_20220224/
+    ├── TEST000_OS_20220224.avi
+    └── TEST000.e2e
+</code></pre>
+<p>Use separate folders for different volumes when the subject, eye and date are identical. Keep a single intended E2E beside each AVI to avoid ambiguous matches. One E2E can contain multiple volumes; you may still need to select the correct series when loading.</p>
+<p>Files with other names can be paired using <strong>Match E2E…</strong>, as described below. Renaming or manually pairing files does not anonymize their contents.</p>
+<h2 id="3-start-the-application-and-load-data">3. Start the application and load data</h2>
+<ol>
+<li>Download the Windows application package from the GitHub repository's <strong>Releases</strong> page and extract the entire package to a folder you can write to. Keep the supplied files and subfolders together.</li>
+<li>Double-click <strong>E2E-Handler.exe</strong>.
+   If Windows reports a missing Visual C++ runtime DLL, run the included <strong>Prerequisites/VC_redist.x64.exe</strong> installer, then start E2E-Handler again.</li>
+<li>Open <strong>1 • Load data</strong> and click <strong>Browse…</strong> to select the data folder. Enable <strong>Include subfolders</strong> if needed, then click <strong>Scan folder</strong>. Use <strong>Single AVI…</strong> to select one AVI instead.</li>
+<li>Review the AVI table:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning / action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Auto matched</strong></td>
+<td>A corresponding E2E filename was found. Confirm the volume after loading.</td>
+</tr>
+<tr>
+<td><strong>Manual match</strong></td>
+<td>A user-confirmed pairing is available.</td>
+</tr>
+<tr>
+<td><strong>Unmatched</strong> with a warning flag</td>
+<td>Select the row to read the reason, then correct the filename/location or use <strong>Match E2E…</strong>.</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Check <strong>Use</strong> for the desired matched files and click <strong>Load selected →</strong>. Unresolved files cannot be selected for loading.</li>
+<li>Review each loaded volume's dimensions and physical spacing. Dimensions are shown as <strong>B-scans × depth pixels × A-lines</strong>.</li>
+<li>Select a loaded volume and click <strong>Match / spacing / crop…</strong> when you need to choose a different E2E series or review the match. Confirm the eye, date, B-scan count, image orientation and OCT crop. Check the fast-axis, axial and B-scan spacing against the original HEYEX scan information. These values determine the physical scale and thickness measurements.</li>
+</ol>
+<p>The crop is automatic. An AVI smaller than the selected E2E OCT dimensions cannot be loaded as that volume. Only change <strong>reverse frame order</strong> or <strong>horizontal flip</strong> when the preview and HEYEX data show that the exported sequence requires it.</p>
+<h3 id="pairing-an-unmatched-avi-manually">Pairing an unmatched AVI manually</h3>
+<ol>
+<li>Select the AVI row and click <strong>Match E2E…</strong>, or double-click the row.</li>
+<li>Choose the E2E exported from the same scan.</li>
+<li>Select the corresponding series and confirm the <strong>subject ID</strong>, <strong>eye</strong> and <strong>imaging date</strong>. Confirmed values are used in the exported results and DICOM metadata.</li>
+<li>Review the dimensions, spacing, orientation and automatic OCT crop. The AVI frame count must equal the E2E series' B-scan count.</li>
+<li>Click <strong>Match files</strong>, check <strong>Use</strong>, then click <strong>Load selected →</strong>.</li>
+</ol>
+<p>Manual matches and their confirmed settings are remembered on this computer. If files are moved, match them again as needed. The source files are not renamed.</p>
+<h2 id="4-generate-en-face-projections">4. Generate en face projections</h2>
+<ol>
+<li>Open <strong>2 • Projections</strong> and check the volumes to process.</li>
+<li>Select a slab row to edit its <strong>Name</strong>, <strong>Start layer</strong>, start <strong>Offset (µm)</strong>, <strong>End layer</strong>, end <strong>Offset (µm)</strong> and <strong>Method</strong>. Use <strong>Add slab</strong> for additional outputs or <strong>Remove selected</strong> to delete a slab.</li>
+<li>Positive offsets move <strong>deeper</strong> into the image relative to the selected boundary. The starting boundary is included and the ending boundary is excluded.</li>
+<li>Choose the projection method: <strong>mean</strong>, <strong>max</strong>, <strong>min</strong>, <strong>sum</strong>, <strong>mean of 5 max pixels</strong> or <strong>mean of 5 min pixels</strong>.</li>
+<li>Choose an output location with <strong>Output folder…</strong>, or leave the default <strong>beside each AVI</strong>. <strong>Use AVI folders</strong> restores the default location.</li>
+<li>Click <strong>Generate projection images</strong> and wait for completion. Use <strong>Open last output</strong> to open the result folder.</li>
+</ol>
+<p>The initial slabs are:</p>
+<table>
+<thead>
+<tr>
+<th>Slab</th>
+<th>Start</th>
+<th>End</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slab 1</td>
+<td>ILM + 0 µm</td>
+<td>RPE + 0 µm</td>
+<td>Mean</td>
+</tr>
+<tr>
+<td>SubRPE slab</td>
+<td>BM + 64 µm</td>
+<td>BM + 400 µm</td>
+<td>Mean</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SubRPE slab</strong> stops at the available image depth at each A-line. For example, where the image extends only 350 µm below BM, the slab uses <strong>64–350 µm below BM</strong>. A slab entirely outside the available image cannot produce a result; other valid outputs can still complete.</p>
+<h2 id="5-generate-thickness-maps">5. Generate thickness maps</h2>
+<ol>
+<li>Open <strong>3 • Thickness maps</strong> and check the volumes to process.</li>
+<li>Review the default map definitions:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Map</th>
+<th>Start layer</th>
+<th>End layer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full retina thickness</td>
+<td>ILM</td>
+<td>RPE</td>
+</tr>
+<tr>
+<td>RPE elevation</td>
+<td>RPE</td>
+<td>BM</td>
+</tr>
+<tr>
+<td>Outer retinal thickness</td>
+<td>INL</td>
+<td>RPE</td>
+</tr>
+<tr>
+<td>Photoreceptor thickness</td>
+<td>PR1</td>
+<td>RPE</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Edit names, boundaries and display settings as needed. The first four map rows can be edited but cannot be removed. Use <strong>Add map</strong> to create additional definitions.</li>
+<li>Set <strong>Sigma (px)</strong> to control map smoothing; <strong>0</strong> disables it. Sigma is measured in output-map pixels. Choose a <strong>Colormap</strong> and the <strong>Min (µm)</strong> / <strong>Max (µm)</strong> display range. These display limits do not clip the raw thickness values.</li>
+<li>Confirm the output location and click <strong>Generate thickness maps</strong>.</li>
+<li>Open the output folder and review the maps, including the versions with a colorbar.</li>
+</ol>
+<p>You can generate projections and thickness maps from the same loaded volumes without loading them again.</p>
+<h2 id="6-review-b-scans-and-segmentation">6. Review B-scans and segmentation</h2>
+<p>The preview initially displays a saved <strong>TEST000 reference B-scan</strong>. This is an example, not a preview of a newly loaded volume.</p>
+<p>After a volume has been processed, select it in the processing tab to review its actual B-scans and segmentation. Use the <strong>B-scan slider</strong>, number control or <strong>Prev</strong> / <strong>Next</strong> buttons to inspect the whole volume. Select a slab or map row to review its boundaries, shown as two thicker dotted white lines. The image and layer lines fit the preview width; scroll vertically if the image is taller than the panel.</p>
+<p>Review the layer positions across all B-scans before interpreting the generated images. If a layer needs correction, return to HEYEX, correct and save it, then re-export the E2E. In <strong>1 • Load data</strong>, remove the affected loaded volume with <strong>Remove selected</strong>, scan/load the updated pair again, and regenerate the results.</p>
+<h3 id="optional-layer-smoothing">Optional layer smoothing</h3>
+<p>Enable <strong>Apply 2D median filter to layers</strong> in <strong>Layer smoothing</strong> when appropriate. The initial window sizes are <strong>3 B-scans × 5 A-scans</strong>. Use odd sizes; <strong>1</strong> disables filtering along that axis. This setting applies to both projection and thickness generation. Larger windows may also smooth real anatomical features, so inspect the resulting layers.</p>
+<p>Layer smoothing does not replace segmentation review in HEYEX. A processed volume's preview reflects its completed run; after changing smoothing settings, generate the results again to review the change.</p>
+<h2 id="7-find-and-use-the-output-files">7. Find and use the output files</h2>
+<p>Each run creates a new folder, so earlier results remain available:</p>
+<pre><code class="language-text">&lt;AVI filename without .avi&gt;/
+├── Proj_run_&lt;date_time&gt;/
+└── Thickness_run_&lt;date_time&gt;/
+</code></pre>
+<p>By default, the AVI-named folder is created beside the AVI. A custom <strong>Output folder…</strong> places results under that location instead. Folder timestamps distinguish separate runs.</p>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Format and purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prj_01_&lt;slab_name&gt;.tiff</code></td>
+<td><strong>8-bit grayscale</strong> projection image for viewing/export.</td>
+</tr>
+<tr>
+<td><code>prj_01_&lt;slab_name&gt;.dcm</code></td>
+<td><strong>16-bit</strong> derived projection image in DICOM format.</td>
+</tr>
+<tr>
+<td><code>T_01_&lt;map_name&gt;_raw_um.tiff</code></td>
+<td><strong>32-bit floating-point</strong> thickness values in <strong>µm</strong>, for quantitative analysis.</td>
+</tr>
+<tr>
+<td><code>T_01_&lt;map_name&gt;_color.tiff</code></td>
+<td>Color thickness map using the selected display range.</td>
+</tr>
+<tr>
+<td><code>T_01_&lt;map_name&gt;_colorbar.tiff</code></td>
+<td>Color thickness map with a <strong>µm colorbar on the right</strong>.</td>
+</tr>
+<tr>
+<td><code>report.json</code></td>
+<td>Run summary, including any outputs that could not be generated.</td>
+</tr>
+</tbody>
+</table>
+<p>The number indicates the slab/map order. Use the <strong>raw µm TIFF</strong> for thickness measurements; the colored images are for display. Projection TIFF and DICOM files use different intensity encodings, so their stored pixel values should not be compared directly.</p>
+<p>Check the completion message. A <strong>partial</strong> run may contain valid completed images while other requested outputs are missing. <strong>Cancel</strong> may leave completed files in the run folder; review the run summary before using them.</p>
+<h2 id="8-settings-and-troubleshooting">8. Settings and troubleshooting</h2>
+<p>Use <strong>Save configuration</strong> / <strong>Load configuration</strong> to reuse analysis definitions and layer-smoothing settings. Choose <strong>classic</strong> or <strong>dark</strong> from the <strong>Theme</strong> menu; the theme is remembered on this computer.</p>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AVI is flagged as unmatched</td>
+<td>Confirm the same subject ID, OD/OS, scan date and folder, or use <strong>Match E2E…</strong>.</td>
+</tr>
+<tr>
+<td>Several possible E2E files or series</td>
+<td>Keep the intended E2E beside the AVI and select the series matching the eye, date and B-scan count.</td>
+</tr>
+<tr>
+<td>B-scan counts or OCT dimensions differ</td>
+<td>Confirm both exports came from the same complete volume. Re-export at native pixel size with one frame per B-scan.</td>
+</tr>
+<tr>
+<td>Preview shows only the TEST000 example</td>
+<td>Process the intended volume, then select it in the processing tab.</td>
+</tr>
+<tr>
+<td>Layers do not follow the OCT image</td>
+<td>Check the selected E2E series, frame order and orientation. Review/correct segmentation in HEYEX and re-export the E2E.</td>
+</tr>
+<tr>
+<td>A slab or map is missing</td>
+<td>Read the completion message/run summary. Check that its boundaries exist and that the slab lies within the image depth.</td>
+</tr>
+<tr>
+<td>Thickness scale seems incorrect</td>
+<td>Verify the physical spacing against HEYEX and confirm the intended layer pair.</td>
+</tr>
+<tr>
+<td>Application does not open</td>
+<td>Extract the full release package again and keep its supplied files together. Record the startup error and include the indicated startup log when reporting the issue.</td>
+</tr>
+</tbody>
+</table>
+<p>For support, use the repository's <strong>Issues</strong> page and include the release version, steps to reproduce and the exact error message. Remove patient information from screenshots, logs and example files before sharing. E2E-Handler does not anonymize the input AVI or E2E files.</p></body></html>

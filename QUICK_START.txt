@@ -1,0 +1,23 @@
+E2E-Handler beta — Quick Start
+Viet-Hoan Le | hoanlv@uw.edu
+
+1. Extract the complete Windows ZIP to a writable folder.
+2. Double-click E2E-Handler.exe. Keep all files and subfolders together.
+   If a Visual C++ runtime is missing, install Prerequisites/VC_redist.x64.exe.
+3. Load data > Browse > included SampleData folder > Scan folder.
+4. Check TEST000_OS_20220224.avi > Load selected.
+5. Projections > select the volume > Generate projection images.
+6. Thickness maps > select the same volume > Generate thickness maps.
+7. Open last output to view the result folder.
+8. Select the processed volume and use the B-scan slider to review its layers.
+
+Your own data: generate and correct segmentation in HEYEX first, save it, then
+export the full volume as AVI using Export > as Picture and export its E2E.
+Put subjectID_OD_YYYYMMDD.avi or subjectID_OS_YYYYMMDD.avi beside subjectID.e2e.
+See USER_MANUAL.html for the complete illustrated-by-examples instructions.
+
+The included TEST000 volume is OS, 24 February 2022, with 97 B-scans.
+Source files are unchanged; the distributed filenames follow automatic naming.
+Projections and thickness runs save in separate timestamped folders.
+
+Support: https://github.com/hoanlv90/E2E-Handler/issues
